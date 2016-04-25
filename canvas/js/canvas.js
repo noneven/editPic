@@ -1,5 +1,5 @@
 window.onload = function(){
-	//naturalWidth width
+	//naturalWidth vs width
 	var container = document.getElementById("container");
 	var containerWidth = parseInt(container.style.width);
 	var containerHeight = parseInt(container.style.height);
@@ -42,13 +42,13 @@ window.onload = function(){
 		point.onmousemove = function(e){
 
 			if (!isPointMouseDown) return;
+
 			context.clearRect(0,0,canvas.width,canvas.height);
 
 			scale = point.value;
 
 			var sx = (canvas.width-canvas.width*scale)/2;
 			var sy = (canvas.height-canvas.height*scale)/2;
-
 			context.drawImage(img,sx,sy,canvas.width*scale,canvas.height*scale);
 		}
 	};
