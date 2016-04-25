@@ -7,10 +7,26 @@
 </head>
 <body>
 <div id="container" style="height: 600px;width: 800px;">
-	<canvas id="canvas"></canvas>
+	<canvas id="canvas">Your browser doesnt support the canvas!</canvas>
 </div>
-<input id="point" type="range" min="0.5" max="3.0" step="0.01" value="1"></input>
-
-<script type="text/javascript" src="./js/canvas.js"></script>
+<canvas id="offcanvas" style="display: none;">Your browser doesnt support the canvas!</canvas>
+<li class="controller">
+	<span>放大缩小:</span>
+	<input id="point" type="range" min="0.5" max="3.0" step="0.01" value="1"></input>
+</li>
+<li class="controller">
+	<span>放大镜半径:</span>
+	<input id="magnifier" type="range" min="50" max="200" step="1" value="100"></input>
+</li>
+<li class="controller">
+	<span>放大镜形状:</span>
+	<input id="magnifierType" name="magnifierType" type="radio" value="0" /><label for="magnifierType">正方形</label>
+	<input id="magnifierType1" name="magnifierType" type="radio" value="1" checked=true /><label for="magnifierType1">圆形</label>
+</li>
+<br/>
+<br/>
+<br/>
+<!-- <script type="text/javascript" src="./js/canvas.js"></script> -->
+<script type="text/javascript" src="./js/magnifier.js"></script>
 </body>
 </html>
