@@ -12,7 +12,7 @@ window.onload = function(){
 	console.log(canvas.getBoundingClientRect());
 
 	var img = new Image();
-	img.src = "./canvas1.jpg";
+	img.src = "./img/canvas1.jpg";
 	img.onload = function(){
 
 		var wR = img.width/containerWidth;
