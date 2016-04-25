@@ -58,9 +58,6 @@ window.onload = function(){
 				console.log("hr-"+hr);
 				sx = (canvas.width-canvas.width*scale)*wr;
 				sy = (canvas.height-canvas.height*scale)*hr;
-
-				/*var sx = movesx*(scale/movescale);
-				var sy = movesy*(scale/movescale);*/
 			}
 			context.drawImage(img,sx,sy,canvas.width*scale,canvas.height*scale);
 		}
@@ -80,19 +77,13 @@ window.onload = function(){
 				ismousedown = true;
 				downpoint.x = e.clientX;
 				downpoint.y = e.clientY;
-				// console.log(downpoint);
-				//console.log(this.style.cursor);
 			};
 
 			canvas.onmousemove = function(e){
 				if (!ismousedown) return;
-				//var left = (containerWidth-canvas.width)/2;
-				//var right = (containerHeight-canvas.height)/2;
 				var w = e.clientX-downpoint.x;
 				var h = e.clientY-downpoint.y;
 
-
-				//console.log(w+"-"+h);
 				var _sx = (canvas.width-canvas.width*scale)/2;
 				var _sy = (canvas.height-canvas.height*scale)/2;
 
@@ -102,7 +93,6 @@ window.onload = function(){
 				if (x<2*_sx) x = 2*_sx;
 				if (y<2*_sy) y = 2*_sy;
 
-				//console.log(sx+"-"+sy);
 				context.clearRect(0,0,canvas.width,canvas.height);
 				context.drawImage(img,x,y,canvas.width*scale,canvas.height*scale);
 			};
@@ -110,21 +100,14 @@ window.onload = function(){
 			canvas.onmouseup = function(e){
 				this.style.cursor = "default";
 				if (ismousedown) {
-					/*downpoint.x = e.clientX;
-					downpoint.y = e.clientY;*/
 					sx = x;
 					sy = y;
-					// console.log(sx+"-"+sy)
+					ismousedown = false;
+					movesx = sx;
+					movesy = sy;
+					movescale = scale;
 				}
-				ismousedown = false;
-				movesx = sx;
-				movesy = sy;
-				movescale = scale;
-				console.log({
-					x:sx,
-					y:sy,
-					scale:scale
-				})
+				
 			};
 
 			canvas.onmouseout = function(e){
@@ -132,18 +115,11 @@ window.onload = function(){
 					sx = x;
 					sy = y;
 					ismousedown = false;
-					// console.log(sx+"-"+sy);
+					movesx = sx;
+					movesy = sy;
+					movescale = scale;	
 				}
-				movesx = sx;
-				movesy = sy;
-				movescale = scale;
-				console.log({
-					x:sx,
-					y:sy,
-					scale:scale
-				})
 			}
-			
 		}
 	};
 };
