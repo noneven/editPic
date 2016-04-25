@@ -28,6 +28,8 @@ window.onload = function(){
 		canvas.style.border = "1px solid #258";
 		context.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
 
+		var movescale,movesx,movesy;
+
 		var scale = point.value;
 		var isPointMouseDown = false;
 		point.onmousedown = function(e){
@@ -42,14 +44,106 @@ window.onload = function(){
 		point.onmousemove = function(e){
 
 			if (!isPointMouseDown) return;
-
 			context.clearRect(0,0,canvas.width,canvas.height);
 
 			scale = point.value;
 
 			var sx = (canvas.width-canvas.width*scale)/2;
 			var sy = (canvas.height-canvas.height*scale)/2;
+			if (typeof movesx!="undefined"&&scale>1) {
+				console.log(movesx+"-"+movesy)
+				var wr = movesx/(canvas.width-canvas.width*movescale);
+				var hr = movesy/(canvas.height-canvas.height*movescale);
+				console.log("wr-"+wr);
+				console.log("hr-"+hr);
+				sx = (canvas.width-canvas.width*scale)*wr;
+				sy = (canvas.height-canvas.height*scale)*hr;
+
+				/*var sx = movesx*(scale/movescale);
+				var sy = movesy*(scale/movescale);*/
+			}
 			context.drawImage(img,sx,sy,canvas.width*scale,canvas.height*scale);
+		}
+		point.onchange = function(){
+
+			if (scale>1) initDrag()
+		}
+
+		function initDrag(){
+			var sx = (canvas.width-canvas.width*scale)/2;
+			var sy = (canvas.height-canvas.height*scale)/2;	
+			var ismousedown = false;
+			var downpoint = {};
+			var x,y;
+			canvas.onmousedown = function(e){
+				this.style.cursor = "pointer";
+				ismousedown = true;
+				downpoint.x = e.clientX;
+				downpoint.y = e.clientY;
+				// console.log(downpoint);
+				//console.log(this.style.cursor);
+			};
+
+			canvas.onmousemove = function(e){
+				if (!ismousedown) return;
+				//var left = (containerWidth-canvas.width)/2;
+				//var right = (containerHeight-canvas.height)/2;
+				var w = e.clientX-downpoint.x;
+				var h = e.clientY-downpoint.y;
+
+
+				//console.log(w+"-"+h);
+				var _sx = (canvas.width-canvas.width*scale)/2;
+				var _sy = (canvas.height-canvas.height*scale)/2;
+
+				x = ((sx + w)<0)?(sx + w):0;
+				y = ((sy + h)<0)?(sy + h):0;
+
+				if (x<2*_sx) x = 2*_sx;
+				if (y<2*_sy) y = 2*_sy;
+
+				//console.log(sx+"-"+sy);
+				context.clearRect(0,0,canvas.width,canvas.height);
+				context.drawImage(img,x,y,canvas.width*scale,canvas.height*scale);
+			};
+
+			canvas.onmouseup = function(e){
+				this.style.cursor = "default";
+				if (ismousedown) {
+					/*downpoint.x = e.clientX;
+					downpoint.y = e.clientY;*/
+					sx = x;
+					sy = y;
+					// console.log(sx+"-"+sy)
+				}
+				ismousedown = false;
+				movesx = sx;
+				movesy = sy;
+				movescale = scale;
+				console.log({
+					x:sx,
+					y:sy,
+					scale:scale
+				})
+			};
+
+			canvas.onmouseout = function(e){
+				if (ismousedown) {
+					sx = x;
+					sy = y;
+					ismousedown = false;
+					// console.log(sx+"-"+sy);
+				}
+				movesx = sx;
+				movesy = sy;
+				movescale = scale;
+				console.log({
+					x:sx,
+					y:sy,
+					scale:scale
+				})
+			}
+			
 		}
 	};
 };
