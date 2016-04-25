@@ -1,0 +1,23 @@
+body{
+	padding: 0;
+	margin: 0;
+}
+#container{
+	border: 1px solid #ccc;
+	/*padding: 10px;*/
+	position: relative;
+}
+#canvas{
+	/*border: 1px solid #258;*/
+	position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    margin: auto;
+
+    /*cursor: pointer;*/
+}
+#point{
+	width:800px;
+}
