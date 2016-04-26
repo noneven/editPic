@@ -5,6 +5,7 @@ window.onload = function(){
 	var containerHeight = parseInt(container.style.height);
 	var mosaic = document.getElementById("mosaic");
 	var resetMosaic = document.getElementById("resetMosaic");
+	var nextMosaic = document.getElementById("nextMosaic");
 
 	var canvas = document.getElementById("canvas");
 	var context = canvas.getContext("2d");
@@ -41,6 +42,7 @@ window.onload = function(){
 
 	 	var currentTrack = [];//保存当前绘制路径中的各点
 	 	var currentStack = [];
+	 	var nextStack = [];
 		var mosaicMouseDown = false;
 		canvas.onmousedown = function(e){
 			mosaicMouseDown = true;
@@ -83,10 +85,12 @@ window.onload = function(){
 			currentTrack = [];
 		};
 		canvas.onmouseout = function(e){
+
 			mosaicMouseDown = false;
 		};
 		canvas.onmouseenter = function(){
-			canvas.style.cursor = "url(http://img.58cdn.com.cn/ui7/post/pc/imgs/bCursorIco.ico),pointer";
+
+			canvas.style.cursor = "url(./img/cursor.ico),pointer";
 		}
 
 		function drawMosaic(point){
@@ -127,13 +131,26 @@ window.onload = function(){
 		}
 
 		resetMosaic.onclick = function(){
-			currentStack.pop();
+			if (currentStack.length==0) return;
+			resetMosaic.style.disabled = false;
+			var p = currentStack.pop();
+			nextStack.push(p);
 			// context.clearRect(0,0,canvas.width,canvas.height);
 			context.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
 			for (var i = 0; i < currentStack.length; i++) {
 				for (var j = 0; j < currentStack[i].length; j++) {
 					drawMosaic(currentStack[i][j])
 				}
+			}
+		}
+		nextMosaic.onclick = function(){
+			if (nextStack.length==0) return;
+			var next = nextStack.pop();
+			currentStack.push(next);
+			// context.clearRect(0,0,canvas.width,canvas.height);
+			// context.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
+			for (var j = 0; j < next.length; j++) {
+				drawMosaic(next[j]);
 			}
 		}
 	};
