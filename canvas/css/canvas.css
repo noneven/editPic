@@ -18,7 +18,7 @@
 
     /*cursor: pointer;*/
 }
-#point,#magnifier{
+#point,#magnifier,#mosaic{
 	width:700px;
     vertical-align: middle;
 }
@@ -32,4 +32,10 @@
 }
 [name="magnifierType"]{
 	vertical-align: top;
+}
+#clipwrap{
+	border: 1px dashed #ccc;
+	position: absolute;
+	left: 0;
+	top: 0
 }
