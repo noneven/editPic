@@ -6,7 +6,7 @@
 	<link rel="stylesheet" type="text/css" href="./css/canvas.css">
 </head>
 <body>
-<div id="container" style="height: 310px;width: 656px;">
+<div id="container" style="height: 400px;width: 800px;">
 	<img id="mohuimg" src="./img/width.jpg" style="
 	    width: 520px;
 	    height: 310px;
@@ -19,7 +19,7 @@
 	    -webkit-filter: blur(10px);
 	    display:none;
 	">
-	<canvas id="canvas">Your browser doesnt support the canvas!</canvas>
+	<canvas id="canvas" style="cursor: default;">Your browser doesnt support the canvas!</canvas>
 	<div id="clipwrap" style="display: none; left: 0;top: 0"></div>
 </div>
 <canvas id="offcanvas" style="display: none;">Your browser doesnt support the canvas!</canvas>
@@ -48,7 +48,7 @@
 
 <li class="controller">
 	<span>模糊半径:</span>
-	<input id="mosaic" type="range" min="1" max="20" step="0.1" value="10"></input>
+	<input id="mosaic" type="range" min="10" max="30" step="0.1" value="15"></input>
 </li>
 <br/>
 <br/>
