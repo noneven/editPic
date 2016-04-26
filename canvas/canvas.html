@@ -6,8 +6,21 @@
 	<link rel="stylesheet" type="text/css" href="./css/canvas.css">
 </head>
 <body>
-<div id="container" style="height: 600px;width: 800px;">
+<div id="container" style="height: 310px;width: 656px;">
+	<img id="mohuimg" src="./img/width.jpg" style="
+	    width: 520px;
+	    height: 310px;
+	    position: absolute;
+	    left: 0;
+	    top: 0;
+	    right: 0;
+	    bottom: 0;
+	    margin: auto;
+	    -webkit-filter: blur(10px);
+	    display:none;
+	">
 	<canvas id="canvas">Your browser doesnt support the canvas!</canvas>
+	<div id="clipwrap" style="display: none; left: 0;top: 0"></div>
 </div>
 <canvas id="offcanvas" style="display: none;">Your browser doesnt support the canvas!</canvas>
 <li class="controller">
@@ -23,10 +36,26 @@
 	<input id="magnifierType" name="magnifierType" type="radio" value="0" /><label for="magnifierType">正方形</label>
 	<input id="magnifierType1" name="magnifierType" type="radio" value="1" checked=true /><label for="magnifierType1">圆形</label>
 </li>
-<br/>
+<li class="controller">
+	<span>旋转:</span>
+	<input type="button" id="rotate" value="旋转"></input>
+	<input type="button" id="reset" disabled=true value="撤销"></input>
+</li>
+<li class="controller">
+	<span>裁剪:</span>
+	<input type="button" id="clip" value="裁剪"></input>
+</li>
+
+<li class="controller">
+	<span>模糊半径:</span>
+	<input id="mosaic" type="range" min="1" max="20" step="0.1" value="10"></input>
+</li>
 <br/>
 <br/>
 <!-- <script type="text/javascript" src="./js/canvas.js"></script> -->
-<script type="text/javascript" src="./js/magnifier.js"></script>
+<!-- <script type="text/javascript" src="./js/magnifier.js"></script> -->
+<!-- <script type="text/javascript" src="./js/rotate.js"></script> -->
+<!-- <script type="text/javascript" src="./js/clip.js"></script> -->
+<script type="text/javascript" src="./js/mosaic.js"></script>
 </body>
 </html>
