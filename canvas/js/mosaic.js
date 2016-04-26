@@ -4,6 +4,7 @@ window.onload = function(){
 	var containerWidth = parseInt(container.style.width);
 	var containerHeight = parseInt(container.style.height);
 	var mosaic = document.getElementById("mosaic");
+	var resetMosaic = document.getElementById("resetMosaic");
 
 	var canvas = document.getElementById("canvas");
 	var context = canvas.getContext("2d");
@@ -39,6 +40,7 @@ window.onload = function(){
 		offcontext.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
 
 	 	var currentTrack = [];//保存当前绘制路径中的各点
+	 	var currentStack = [];
 		var mosaicMouseDown = false;
 		canvas.onmousedown = function(e){
 			mosaicMouseDown = true;
@@ -77,6 +79,8 @@ window.onload = function(){
 		};
 		canvas.onmouseup = function(e){
 			mosaicMouseDown = false;
+			currentStack.push(currentTrack);
+			currentTrack = [];
 		};
 		canvas.onmouseout = function(e){
 			mosaicMouseDown = false;
@@ -86,6 +90,7 @@ window.onload = function(){
 		}
 
 		function drawMosaic(point){
+
 			var lineWeight = parseInt(mosaic.value);
 			var w = canvas.width;
 	        var h = canvas.height;
@@ -119,6 +124,17 @@ window.onload = function(){
 	        //返回数据保存在历史记录中下次撤销操作不再获取颜色值
 
 	        return point;
+		}
+
+		resetMosaic.onclick = function(){
+			currentStack.pop();
+			// context.clearRect(0,0,canvas.width,canvas.height);
+			context.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
+			for (var i = 0; i < currentStack.length; i++) {
+				for (var j = 0; j < currentStack[i].length; j++) {
+					drawMosaic(currentStack[i][j])
+				}
+			}
 		}
 	};
 };
