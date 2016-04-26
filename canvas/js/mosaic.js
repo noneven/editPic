@@ -3,6 +3,7 @@ window.onload = function(){
 	var container = document.getElementById("container");
 	var containerWidth = parseInt(container.style.width);
 	var containerHeight = parseInt(container.style.height);
+	var mosaic = document.getElementById("mosaic");
 
 	var canvas = document.getElementById("canvas");
 	var context = canvas.getContext("2d");
@@ -10,7 +11,7 @@ window.onload = function(){
 	var offcontext = offcanvas.getContext("2d");
 
 	var img = new Image();
-	img.src = "./img/width.jpg";
+	img.src = "./img/height.jpg";
 	img.crossOrigin = '';
 	img.onload = function(){
 
@@ -37,11 +38,21 @@ window.onload = function(){
 		//离屏canvas是载入的原图，而可视canvas是载入的原图缩放版
 		offcontext.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
 
-
-
+	 	var currentTrack = [];//保存当前绘制路径中的各点
 		var mosaicMouseDown = false;
 		canvas.onmousedown = function(e){
 			mosaicMouseDown = true;
+			//鼠标在屏幕的位置
+			var cx = e.clientX;
+			var cy = e.clientY;
+			//canvas相对屏幕的位置
+			var rx = (containerWidth-canvas.width)/2;
+			var ry = (containerHeight-canvas.height)/2;
+			//鼠标相对canvas的距离
+			var dx = cx-rx;
+			var dy = cy-ry;
+			currentTrack.push(drawMosaic([dx,dy]))
+			
 		};
 		canvas.onmousemove = function(e){
 			//鼠标在屏幕的位置
@@ -54,21 +65,14 @@ window.onload = function(){
 			var dx = cx-rx;
 			var dy = cy-ry;
 
-			var data = context.getImageData(dx,dy,1,1).data;
-			console.log(data)
-
-			var mr = 10;
 			if (mosaicMouseDown) {
-				//清除画布重新载入图片
-				// context.clearRect(0,0,canvas.width,canvas.height);
-				context.save();
-
-				//画一个矩形
-				context.beginPath();
-				context.lineWidth = 1;
-				context.strokeStyle = "#fff";
-
-				context.restore();
+				var lineWeight = parseInt(mosaic.value);
+                var len = currentTrack.length;
+                //在同一马赛克块则不保存此点
+                if((Math.floor(dx/lineWeight) == Math.floor(currentTrack[len-1][0]/lineWeight)) && (Math.floor(dy/lineWeight) == Math.floor(currentTrack[len-1][1]/lineWeight))){
+                    return;
+                }
+        		currentTrack.push(drawMosaic([dx,dy]));
 			}
 		};
 		canvas.onmouseup = function(e){
@@ -77,5 +81,44 @@ window.onload = function(){
 		canvas.onmouseout = function(e){
 			mosaicMouseDown = false;
 		};
+		canvas.onmouseenter = function(){
+			canvas.style.cursor = "url(http://img.58cdn.com.cn/ui7/post/pc/imgs/bCursorIco.ico),pointer";
+		}
+
+		function drawMosaic(point){
+			var lineWeight = parseInt(mosaic.value);
+			var w = canvas.width;
+	        var h = canvas.height;
+
+	        //若是新绘制则计算该马赛克块的坐标等信息
+	        if( typeof point[2] == 'undefined'){//不是撤销重画
+	        	
+	        	//赛克块横纵坐标
+	            var rectX = Math.floor(point[0]/lineWeight)*lineWeight;
+	            var rectY = Math.floor(point[1]/lineWeight)*lineWeight;
+
+	            /*
+					var rectX = point[0]-Math.floor(lineWeight/2);
+	            	var rectY = point[1]-Math.floor(lineWeight/2);
+	            */
+	            //取鼠标位置颜色
+	            var data = context.getImageData(point[0],point[1],1,1).data;
+	            var fillStyle = 'rgba(' + data[0] +','+ data[1] +','+ data[2] +','+ data[3] + ')';
+	            point[2] = fillStyle;
+	            point[3] = rectX;
+	            point[4] = rectY;
+	            point[5] = (w > (rectX + lineWeight))?lineWeight:(w-rectX);
+	            point[6] = (h > (rectY + lineWeight))?lineWeight:(h-rectY);
+
+	            // currentTrack[currentTrack.length - 1] = point;
+
+	        }
+	        //撤销图片时不需再计算;
+	        context.fillStyle = point[2];
+	        context.fillRect(point[3],point[4],point[5],point[6]);
+	        //返回数据保存在历史记录中下次撤销操作不再获取颜色值
+
+	        return point;
+		}
 	};
 };
