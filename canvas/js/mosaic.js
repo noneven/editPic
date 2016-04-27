@@ -55,8 +55,8 @@ window.onload = function(){
 			//鼠标相对canvas的距离
 			var dx = cx-rx;
 			var dy = cy-ry;
-			currentTrack.push(drawMosaic([dx,dy]))
 			
+			currentTrack.push(drawMosaic([dx,dy]))
 		};
 		canvas.onmousemove = function(e){
 			//鼠标在屏幕的位置
@@ -73,23 +73,30 @@ window.onload = function(){
 				var lineWeight = parseInt(mosaic.value);
                 var len = currentTrack.length;
                 //在同一马赛克块则不保存此点
-                if((Math.floor(dx/lineWeight) == Math.floor(currentTrack[len-1][0]/lineWeight)) && (Math.floor(dy/lineWeight) == Math.floor(currentTrack[len-1][1]/lineWeight))){
+                if((Math.floor(dx/lineWeight) == Math.floor(currentTrack[len-1][0]/lineWeight)) 
+                	&& (Math.floor(dy/lineWeight) == Math.floor(currentTrack[len-1][1]/lineWeight))){
                     return;
                 }
+                //push当前马赛克点
         		currentTrack.push(drawMosaic([dx,dy]));
 			}
 		};
 		canvas.onmouseup = function(e){
 			mosaicMouseDown = false;
+			//push到操作步骤栈
 			currentStack.push(currentTrack);
+			//remove当前路径栈
 			currentTrack = [];
 		};
 		canvas.onmouseout = function(e){
-
 			mosaicMouseDown = false;
+			//push到操作步骤栈
+			currentStack.push(currentTrack);
+			//remove当前路径栈
+			currentTrack = [];
 		};
 		canvas.onmouseenter = function(){
-
+			//设置马赛克鼠标hover图标
 			canvas.style.cursor = "url(./img/cursor.ico),pointer";
 		}
 
@@ -106,10 +113,10 @@ window.onload = function(){
 	            var rectX = Math.floor(point[0]/lineWeight)*lineWeight;
 	            var rectY = Math.floor(point[1]/lineWeight)*lineWeight;
 
-	            /*
-					var rectX = point[0]-Math.floor(lineWeight/2);
-	            	var rectY = point[1]-Math.floor(lineWeight/2);
-	            */
+	            //  这种方式以鼠标点击中心周围的几个点mosaic可能会出现便捷问题
+				//	var rectX = point[0]-Math.floor(lineWeight/2);
+	            //	var rectY = point[1]-Math.floor(lineWeight/2);
+	            
 	            //取鼠标位置颜色
 	            var data = context.getImageData(point[0],point[1],1,1).data;
 	            var fillStyle = 'rgba(' + data[0] +','+ data[1] +','+ data[2] +','+ data[3] + ')';
@@ -118,8 +125,6 @@ window.onload = function(){
 	            point[4] = rectY;
 	            point[5] = (w > (rectX + lineWeight))?lineWeight:(w-rectX);
 	            point[6] = (h > (rectY + lineWeight))?lineWeight:(h-rectY);
-
-	            // currentTrack[currentTrack.length - 1] = point;
 
 	        }
 	        //撤销图片时不需再计算;
