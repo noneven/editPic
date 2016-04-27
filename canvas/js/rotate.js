@@ -35,14 +35,17 @@ window.onload = function(){
 		offcanvas.height = canvas.height;
 		offcontext.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
 		//旋转度数
+		//旋转问题主要是寻找到旋转后图形的起始点(左上角的点)；然后在调用drawImage画图即可
 		var degrees = 0;
 		function doRotate(degrees){
 			reset.disabled = false;
-			context.save();
 			degrees = degrees%360
 			var wh = getCanvasWHByDeg(degrees);
 			canvas.width = wh.w;
 			canvas.height = wh.h;
+
+			context.save();
+			context.clearRect(0,0,canvas.width,canvas.height);
 			switch(degrees){
 				case 90:
 				context.translate(canvas.width, 0);
@@ -54,6 +57,7 @@ window.onload = function(){
 				context.translate(0, canvas.height);
 				break;
 				case 0:
+				context.translate(0, 0);
 				break;
 				default:
 				//not do
@@ -61,11 +65,11 @@ window.onload = function(){
 			//旋转
 			context.rotate(degrees*Math.PI/180);
 			//清空画布
-			context.clearRect(0,0,canvas.width,canvas.height);
 			//重画
 			(degrees%180==90)?
 				context.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.height,canvas.width):
 				context.drawImage(img, 0, 0, img.width, img.height,0,0,canvas.width,canvas.height);
+
 			context.restore();
 		}
 
